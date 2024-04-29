@@ -18,7 +18,11 @@ build: ## Build the server.
 dev: ## Run local server.
 	@go run ./cmd/server/main.go
 
-all: clean lint test build run ## Run all tests, then build and run
+all: clean ## Run all tests, then build and run
+	@$(MAKE) lint
+	@$(MAKE) test
+	@$(MAKE) build
+	@$(MAKE) run
 
 clean: ## Clean up, i.e. remove build artifacts
 	rm -rf $(BUILD_DIR)
