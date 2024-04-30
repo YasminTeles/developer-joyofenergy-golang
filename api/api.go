@@ -5,8 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"joi-energy-golang/domain"
-	"log"
 	"net/http"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func SuccessJson(w http.ResponseWriter, r *http.Request, data interface{}) {
@@ -23,45 +24,57 @@ func SuccessJson(w http.ResponseWriter, r *http.Request, data interface{}) {
 func Success(w http.ResponseWriter, r *http.Request, jsonMsg []byte) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if _, err := w.Write(jsonMsg); err != nil {
-		log.Printf("Error writing response: %v", err)
+		log.WithFields(log.Fields{
+			"error": err,
+		}).Error("Error writing response.")
 	}
 
-	log.Printf(
-		"%s %s %s 200",
-		r.Method,
-		r.RequestURI,
-		r.RemoteAddr,
-	)
+	log.WithFields(log.Fields{
+		"method":   r.Method,
+		"request":  r.RequestURI,
+		"port":     r.RemoteAddr,
+		"httpCode": "200",
+	}).Info("Success writing response.")
+
 }
 
 func Error(w http.ResponseWriter, r *http.Request, err error, code int) {
 	if code == 0 {
 		code = toHTTPStatusCode(err)
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(code)
+
 	if err == nil {
-		err = fmt.Errorf("nil err")
+		log.WithFields(log.Fields{
+			"error": err,
+		}).Error("Nil Error")
 	}
+
 	logErr := err
 	errorMsgJSON, err := json.Marshal(domain.ErrorResponse{Message: err.Error()})
 	if err != nil {
-		log.Println(err)
+		log.WithFields(log.Fields{
+			"error": err,
+		}).Error("Error Marshal.")
+
 	} else {
 		if _, err = w.Write(errorMsgJSON); err != nil {
-			log.Printf("Error writing response: %v", err)
+			log.WithFields(log.Fields{
+				"error": err,
+			}).Error("Error writing response.")
 		}
 	}
 
-	log.Printf(
-		"%s %s %s %d %s",
-		r.Method,
-		r.RequestURI,
-		r.RemoteAddr,
-		code,
-		logErr.Error(),
-	)
+	log.WithFields(log.Fields{
+		"method":   r.Method,
+		"request":  r.RequestURI,
+		"port":     r.RemoteAddr,
+		"httpCode": code,
+		"error":    logErr.Error(),
+	}).Error("Error writing response.")
 }
 
 func toHTTPStatusCode(err error) int {

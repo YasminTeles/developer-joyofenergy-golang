@@ -7,12 +7,12 @@ import (
 	"joi-energy-golang/endpoints/readings"
 	"joi-energy-golang/endpoints/standard"
 	"joi-energy-golang/repository"
-	"log"
 	"net/http"
 	"os"
 	"strings"
 
 	"github.com/julienschmidt/httprouter"
+	log "github.com/sirupsen/logrus"
 )
 
 func NewServer() *http.Server {
@@ -25,7 +25,10 @@ func getListeningPort() string {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
-		log.Printf("Defaulting to port %s", port)
+		log.WithFields(log.Fields{
+			"port": port,
+		}).Info("Defaulting to port...")
+
 	}
 
 	return fmt.Sprintf(":%s", port)
@@ -68,12 +71,17 @@ func newHandler() http.Handler {
 	})
 
 	r.PanicHandler = func(w http.ResponseWriter, r *http.Request, err interface{}) {
-		log.Printf("panic: %+v", err)
+		log.WithFields(log.Fields{
+			"error": err,
+		}).Panic("whoops! My handler has run into a panic.")
+
 		api.Error(w, r, fmt.Errorf("whoops! My handler has run into a panic"), http.StatusInternalServerError)
 	}
+
 	r.MethodNotAllowed = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		api.Error(w, r, fmt.Errorf("we have OPTIONS for youm but %v is not among them", r.Method), http.StatusMethodNotAllowed)
 	})
+
 	r.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(r.Header.Get("Accept"), "text/html") {
 			sendBrowserDoc(w, r)

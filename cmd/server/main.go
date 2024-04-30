@@ -3,13 +3,20 @@ package main
 import (
 	"context"
 	"joi-energy-golang/router"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
+
+func init() {
+	log.SetFormatter(&log.TextFormatter{
+		TimestampFormat: "02-01-2006 15:04:05",
+	})
+}
 
 func main() {
 	Run()
@@ -25,18 +32,23 @@ func Run() {
 	go func() {
 		<-c
 		println()
-		log.Println("Shutting down server...")
+		log.Info("Shutting down server...")
 
 		err := gracefulShutdown(server, 25*time.Second)
 
 		if err != nil {
-			log.Printf("Server stopped: %s", err.Error())
+			log.WithFields(log.Fields{
+				"error": err.Error(),
+			}).Fatal("Server stopped!")
 		}
 
 		os.Exit(0)
 	}()
 
-	log.Printf("Listening on %s", server.Addr)
+	log.WithFields(log.Fields{
+		"port": server.Addr,
+	}).Info("Starting server...")
+
 	log.Fatal(server.ListenAndServe())
 }
 
