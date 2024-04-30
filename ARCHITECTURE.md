@@ -28,6 +28,10 @@ Continuos delivery:
 
 - [Docker](https://www.docker.com/) - Docker enables you to separate your applications from your infrastructure so you can deliver software quickly.
 
+Troubleshooting features:
+
+- **Structured and centralized logger**: using [Logrus](https://github.com/sirupsen/logrus);
+
 ## Versions
 
 We use [Semantic version](http://semver.org) for versioning. For versions available, see [changelog](CHANGELOG.md).
