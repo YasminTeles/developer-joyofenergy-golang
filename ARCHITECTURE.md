@@ -8,7 +8,47 @@ This simple server provides the following end points:
  That returns the version of the server. It's useful for blue-green development.
 
 - `GET /healthcheck`
- That returns the health of the server running. It's useful for check if the server can be able handling requests.
+That returns the health of the server running. It's useful for checking if the server can handle requests.
+
+- `POST /price-plans/estimate`
+That returns the electricity cost and the lowest tariffs. You need to send usage data.
+
+    **Input**
+
+    ```json
+      {
+        "smartMeterId": "smart-meter-0",
+        "electricityReadings": [{ "time": <UTC-Time>, "reading": <reading> }],
+      }
+    ```
+
+    `time`: UTC time, e.g. `2024-04-13T19:41:26Z`
+
+    `reading`: kW reading of smart meter at that time, e.g. `0.0503`
+
+    **Output**
+
+    ```json
+        {
+          "electricityCost": 159.0,
+          "recommendations": {
+            "recommendations": [
+              {
+                "key": "price-plan-2",
+                "value": 11.346088258014543
+              },
+              {
+                "key": "price-plan-1",
+                "value": 22.692176516029086
+              },
+              {
+                "key": "price-plan-0",
+                "value": 113.46088258014544
+              }
+            ]
+          }
+        }
+    ```
 
 ## Built with
 

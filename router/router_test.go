@@ -100,3 +100,17 @@ func TestGetCustomPort(t *testing.T) {
 
 	assert.Equal(t, ":4000", actual)
 }
+
+func TestElectricityCostEndPoint(t *testing.T) {
+	t.Parallel()
+
+	testHandler := newHandler()
+	rr := httptest.NewRecorder()
+
+	body := `{"smartMeterId": "smart-meter-0", "electricityReadings": []}`
+
+	request, _ := http.NewRequest(http.MethodPost, "/price-plans/estimate", strings.NewReader(body))
+
+	testHandler.ServeHTTP(rr, request)
+	assert.Equal(t, http.StatusOK, rr.Code)
+}

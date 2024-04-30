@@ -61,6 +61,7 @@ func addRoutes(router *httprouter.Router) {
 
 	router.GET("/price-plans/compare-all/:smartMeterId", middleware.RequestIDMiddleware(middleware.LoggingMiddleware(pricePlanHandler.CompareAll)))
 	router.GET("/price-plans/recommend/:smartMeterId", middleware.RequestIDMiddleware(middleware.LoggingMiddleware(pricePlanHandler.Recommend)))
+	router.POST("/price-plans/estimate", middleware.RequestIDMiddleware(middleware.LoggingMiddleware(pricePlanHandler.ElectricityCost)))
 }
 
 func newHandler() http.Handler {

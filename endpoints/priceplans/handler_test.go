@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
-
 	"github.com/stretchr/testify/assert"
 
 	"joi-energy-golang/domain"
@@ -66,6 +66,27 @@ func TestCompareAllPricePlansHandleServiceError(t *testing.T) {
 	assert.Equal(t, domain.ErrorResponse{Message: "oops"}, response)
 }
 
+// func TestElectricityCostHandler(t *testing.T) {
+// 	t.Parallel()
+
+// 	s := &MockService{}
+// 	h := NewHandler(s)
+// 	params := httprouter.Params{{Key: "smartMeterId", Value: ""}}
+// 	recommendPricePlans := http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+// 		h.Recommend(writer, request, params)
+// 	})
+
+// 	rr := callEndpoint(recommendPricePlans, "/price-plans/estimate/", t)
+// 	assert.NotEqual(t, http.StatusOK, rr.Code, "handler returned status code %v on failing request", rr.Code)
+
+// 	var response domain.ErrorResponse
+
+// 	err := json.Unmarshal(rr.Body.Bytes(), &response)
+// 	assert.NoError(t, err)
+
+// 	assert.Equal(t, domain.ErrorResponse{Message: "cannot be blank"}, response)
+// }
+
 func TestCompareAllPricePlansHandlerWithInvalidInput(t *testing.T) {
 	t.Parallel()
 
@@ -85,6 +106,59 @@ func TestCompareAllPricePlansHandlerWithInvalidInput(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, domain.ErrorResponse{Message: "cannot be blank"}, response)
+}
+
+func TestSumElectricity(t *testing.T) {
+	t.Parallel()
+
+	readings := domain.StoreReadings{
+		SmartMeterId: "smartMeterId",
+		ElectricityReadings: []domain.ElectricityReading{
+			{
+				Time:    time.Now(),
+				Reading: 2.449985365357211,
+			},
+			{
+				Time:    time.Now(),
+				Reading: 2.435749415846827,
+			},
+		},
+	}
+
+	amount := sumElectricity(readings)
+
+	assert.Equal(t, amount, 4.885734781204038)
+}
+
+func TestGetElectricityCost(t *testing.T) {
+	t.Parallel()
+
+	readings := domain.StoreReadings{
+		SmartMeterId: "smartMeterId",
+		ElectricityReadings: []domain.ElectricityReading{
+			{
+				Time:    time.Now(),
+				Reading: 2.449985365357211,
+			},
+			{
+				Time:    time.Now(),
+				Reading: 2.435749415846827,
+			},
+		},
+	}
+
+	allPricePlans := domain.PricePlanComparisons{
+		PricePlanId: "price-plan-0",
+		PricePlanComparisons: map[string]float64{
+			"price-plan-0": 210.038654450053,
+			"price-plan-1": 42.0077308900106,
+			"price-plan-2": 21.0038654450053,
+		},
+	}
+
+	cost := getElectricityCost(readings, allPricePlans)
+
+	assert.Equal(t, cost, 1026.1931594439202)
 }
 
 type MockService struct {

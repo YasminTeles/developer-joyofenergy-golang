@@ -57,7 +57,13 @@ type StoreReadings struct {
 }
 
 func (readings StoreReadings) Validate() error {
-	return validation.ValidateStruct(&readings,
+	return validation.ValidateStruct(
+		&readings,
 		validation.Field(&readings.SmartMeterId, validation.Required),
 	)
+}
+
+type ElectricityCost struct {
+	ElectricityCost float64                `json:"electricityCost"`
+	Recommendations []SingleRecommendation `json:"recommendations"`
 }
