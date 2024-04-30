@@ -1,10 +1,15 @@
-.PHONY: setup test build dev all clean lint run help
+.PHONY: help setup test build dev all clean lint run help
 .PHONY: docker-build docker-run docker-kill
 
 BUILD_DIR := bin
 TOOLS_DIR := tools
 
-.DEFAULT_GOAL:=help
+help: ## Show help.
+	@printf "A set of development commands.\n"
+	@printf "\nUsage:\n"
+	@printf "\t make \033[36m<commands>\033[0m\n"
+	@printf "\nThe Commands are:\n\n"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\t\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 setup: ## Set up the server.
 	@go mod download
@@ -18,29 +23,26 @@ build: ## Build the server.
 dev: ## Run local server.
 	@go run ./cmd/server/main.go
 
-all: clean ## Run all tests, then build and run
+all: clean ## Run all tests, then build and run.
 	@$(MAKE) lint
 	@$(MAKE) test
 	@$(MAKE) build
 	@$(MAKE) run
 
-clean: ## Clean up, i.e. remove build artifacts
+clean: ## Clean up, i.e. remove build artifacts.
 	rm -rf $(BUILD_DIR)
 	rm -rf $(TOOLS_DIR)
 	@go mod tidy
 
-run: build ## Run the binary
+run: build ## Run the binary.
 	$(BUILD_DIR)/server
 
 tools/golangci-lint/golangci-lint:
 	mkdir -p tools/
 	curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b tools/golangci-lint latest
 
-lint: $(TOOLS_DIR)/golangci-lint/golangci-lint ## Run linters
+lint: $(TOOLS_DIR)/golangci-lint/golangci-lint ## Run linters.
 	./$(TOOLS_DIR)/golangci-lint/golangci-lint run ./...
-
-help: ## Display this help
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 docker-build: ## Build container's Docker.
 	@docker build -t server .
