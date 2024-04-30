@@ -9,10 +9,13 @@ import (
 
 func LoggingMiddleware(next httprouter.Handle) httprouter.Handle {
 	return func(response http.ResponseWriter, request *http.Request, params httprouter.Params) {
+		requestID := request.Header.Get("X-Request-ID")
+
 		log.WithFields(log.Fields{
-			"method":   request.Method,
-			"request":  request.RequestURI,
-			"hostname": request.Host,
+			"X-Request-ID": requestID,
+			"method":       request.Method,
+			"request":      request.RequestURI,
+			"hostname":     request.Host,
 		}).Info("Started handling request.")
 
 		next(response, request, params)

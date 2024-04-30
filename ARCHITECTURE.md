@@ -32,6 +32,7 @@ Troubleshooting features:
 
 - **Structured and centralized logger**: using [Logrus](https://github.com/sirupsen/logrus);
 - **Log each request received**;
+- **Unique identifier request**;
 
 ## Versions
 

@@ -35,7 +35,7 @@ func getListeningPort() string {
 	return fmt.Sprintf(":%s", port)
 }
 
-func addRoutes(r *httprouter.Router) {
+func addRoutes(router *httprouter.Router) {
 	accounts := repository.NewAccounts(defaultSmartMeterToPricePlanAccounts())
 	meterReadings := repository.NewMeterReadings(
 		defaultMeterElectricityReadings(),
@@ -48,13 +48,13 @@ func addRoutes(r *httprouter.Router) {
 	readingsHandler := readings.NewHandler(&meterReadings)
 	pricePlanHandler := priceplans.NewHandler(priceplans.NewService(&pricePlans, &accounts))
 
-	r.GET("/healthcheck", middleware.LoggingMiddleware(standard.Healthcheck))
+	router.GET("/healthcheck", middleware.RequestIDMiddleware(middleware.LoggingMiddleware(standard.Healthcheck)))
 
-	r.POST("/readings/store", middleware.LoggingMiddleware(readingsHandler.StoreReadings))
-	r.GET("/readings/read/:smartMeterId", middleware.LoggingMiddleware(readingsHandler.GetReadings))
+	router.POST("/readings/store", middleware.RequestIDMiddleware(middleware.LoggingMiddleware(readingsHandler.StoreReadings)))
+	router.GET("/readings/read/:smartMeterId", middleware.RequestIDMiddleware(middleware.LoggingMiddleware(readingsHandler.GetReadings)))
 
-	r.GET("/price-plans/compare-all/:smartMeterId", middleware.LoggingMiddleware(pricePlanHandler.CompareAll))
-	r.GET("/price-plans/recommend/:smartMeterId", middleware.LoggingMiddleware(pricePlanHandler.Recommend))
+	router.GET("/price-plans/compare-all/:smartMeterId", middleware.RequestIDMiddleware(middleware.LoggingMiddleware(pricePlanHandler.CompareAll)))
+	router.GET("/price-plans/recommend/:smartMeterId", middleware.RequestIDMiddleware(middleware.LoggingMiddleware(pricePlanHandler.Recommend)))
 }
 
 func newHandler() http.Handler {
