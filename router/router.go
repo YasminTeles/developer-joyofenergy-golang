@@ -6,6 +6,7 @@ import (
 	"joi-energy-golang/endpoints/priceplans"
 	"joi-energy-golang/endpoints/readings"
 	"joi-energy-golang/endpoints/standard"
+	"joi-energy-golang/middleware"
 	"joi-energy-golang/repository"
 	"net/http"
 	"os"
@@ -47,13 +48,13 @@ func addRoutes(r *httprouter.Router) {
 	readingsHandler := readings.NewHandler(&meterReadings)
 	pricePlanHandler := priceplans.NewHandler(priceplans.NewService(&pricePlans, &accounts))
 
-	r.GET("/healthcheck", standard.Healthcheck)
+	r.GET("/healthcheck", middleware.LoggingMiddleware(standard.Healthcheck))
 
-	r.POST("/readings/store", readingsHandler.StoreReadings)
-	r.GET("/readings/read/:smartMeterId", readingsHandler.GetReadings)
+	r.POST("/readings/store", middleware.LoggingMiddleware(readingsHandler.StoreReadings))
+	r.GET("/readings/read/:smartMeterId", middleware.LoggingMiddleware(readingsHandler.GetReadings))
 
-	r.GET("/price-plans/compare-all/:smartMeterId", pricePlanHandler.CompareAll)
-	r.GET("/price-plans/recommend/:smartMeterId", pricePlanHandler.Recommend)
+	r.GET("/price-plans/compare-all/:smartMeterId", middleware.LoggingMiddleware(pricePlanHandler.CompareAll))
+	r.GET("/price-plans/recommend/:smartMeterId", middleware.LoggingMiddleware(pricePlanHandler.Recommend))
 }
 
 func newHandler() http.Handler {
