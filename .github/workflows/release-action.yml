@@ -39,9 +39,24 @@ jobs:
     name: Docker image
     needs: Release
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
     steps:
       - name: Check out the repository code
         uses: actions/checkout@v4
 
       - name: Build an image from Dockerfile
         run: make docker-build
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'server'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'

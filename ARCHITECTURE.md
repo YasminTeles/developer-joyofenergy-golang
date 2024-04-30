@@ -19,6 +19,7 @@ Continuos integration:
 - [Semantic release](https://github.com/semantic-release) - Fully automated version management and package publishing.
 - [Gitleaks](https://github.com/gitleaks/gitleaks) - Gitleaks is an open-source tool to detect and prevent secrets in Git repositories.
 - [Golangci-lint](https://github.com/golangci/golangci-lint) - Linter for your Golang code.
+- [Trivy](https://trivy.dev/) - The container vulnerability scanner.
 
 Tests:
 
