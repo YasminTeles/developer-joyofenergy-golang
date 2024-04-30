@@ -1,6 +1,11 @@
 .PHONY: help setup test build dev all clean lint run help
 .PHONY: docker-build docker-run docker-kill
 
+
+VERSION := 'joi-energy-golang/endpoints/standard.GitTag=$(shell git describe --tags --always)'
+COMMIT := 'joi-energy-golang/endpoints/standard.GitCommit=$(shell git rev-list --oneline -1 HEAD)'
+BUILD := 'joi-energy-golang/endpoints/standard.BuildData=$(shell date +%F%t%T)'
+
 BUILD_DIR := bin
 TOOLS_DIR := tools
 
@@ -18,10 +23,10 @@ test: ## Run the tests.
 	@go test -v ./... -cover -coverprofile=coverage.txt -covermode=atomic -p 8
 
 build: ## Build the server.
-	@go build -v -ldflags "-s -w" -o ./bin/server ./cmd/server
+	@go build -v -ldflags "-s -w -X $(COMMIT) -X $(VERSION) -X $(BUILD)" -o ./bin/server ./cmd/server
 
 dev: ## Run local server.
-	@go run ./cmd/server/main.go
+	@go run -ldflags "-X $(COMMIT) -X $(VERSION) -X $(BUILD)" ./cmd/server/main.go
 
 all: clean ## Run all tests, then build and run.
 	@$(MAKE) lint

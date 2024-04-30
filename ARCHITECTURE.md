@@ -4,6 +4,9 @@
 
 This simple server provides the following end points:
 
+- `GET /version`
+ That returns the version of the server. It's useful for blue-green development.
+
 - `GET /healthcheck`
  That returns the health of the server running. It's useful for check if the server can be able handling requests.
 

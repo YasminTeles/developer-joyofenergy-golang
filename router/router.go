@@ -54,6 +54,7 @@ func addRoutes(router *httprouter.Router) {
 	pricePlanHandler := priceplans.NewHandler(priceplans.NewService(&pricePlans, &accounts))
 
 	router.GET("/healthcheck", middleware.RequestIDMiddleware(middleware.LoggingMiddleware(standard.Healthcheck)))
+	router.GET("/version", middleware.RequestIDMiddleware(middleware.LoggingMiddleware(standard.Version)))
 
 	router.POST("/readings/store", middleware.RequestIDMiddleware(middleware.LoggingMiddleware(readingsHandler.StoreReadings)))
 	router.GET("/readings/read/:smartMeterId", middleware.RequestIDMiddleware(middleware.LoggingMiddleware(readingsHandler.GetReadings)))
