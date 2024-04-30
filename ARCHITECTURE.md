@@ -23,6 +23,7 @@ Continuos integration:
 - [Gitleaks](https://github.com/gitleaks/gitleaks) - Gitleaks is an open-source tool to detect and prevent secrets in Git repositories.
 - [Golangci-lint](https://github.com/golangci/golangci-lint) - Linter for your Golang code.
 - [Trivy](https://trivy.dev/) - The container vulnerability scanner.
+- [Gosec](https://github.com/securego/gosec) - Inspects source code for security problems by scanning the Go AST and SSA code representation.
 
 Tests:
 

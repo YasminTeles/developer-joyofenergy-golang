@@ -84,3 +84,16 @@ jobs:
         with:
           version: latest
           args: --enable paralleltest
+
+  Vulnerability:
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+    steps:
+      - name: Check out the repository code
+        uses: actions/checkout@v4
+
+      - name: Run Security Scanner
+        uses: securego/gosec@master
+        with:
+          args: ./...
