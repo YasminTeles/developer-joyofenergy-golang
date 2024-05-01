@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.1](https://github.com/YasminTeles/developer-joyofenergy-golang/compare/1.2.0...1.2.1) (2024-05-01)
+
+
+### Bug Fixes
+
+* add timeout configs in server ([f8ea069](https://github.com/YasminTeles/developer-joyofenergy-golang/commit/f8ea0697ba0d434ac3899bad37cdbcf88929bdef))
+
 # [1.2.0](https://github.com/YasminTeles/developer-joyofenergy-golang/compare/1.1.0...1.2.0) (2024-04-30)
 
 
