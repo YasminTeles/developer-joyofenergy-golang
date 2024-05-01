@@ -5,7 +5,6 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"strings"
 	"testing"
 	"time"
@@ -15,12 +14,9 @@ import (
 	"joi-energy-golang/domain"
 )
 
+// nolint: paralleltest
 func TestServer(t *testing.T) {
-	t.Parallel()
-
-	port := os.Getenv("PORT")
-	os.Setenv("PORT", "8081")
-	defer os.Setenv("PORT", port)
+	t.Setenv("PORT", "8081")
 
 	server := NewServer()
 	go func() {
@@ -85,4 +81,22 @@ func TestHealthcheckEndPoint(t *testing.T) {
 	message := strings.Trim(string(byteBody), "\n")
 
 	assert.Equal(t, "Working!", message)
+}
+
+// nolint: paralleltest
+func TestGetDefaultPort(t *testing.T) {
+	t.Setenv("PORT", "")
+
+	actual := getListeningPort()
+
+	assert.Equal(t, ":8080", actual)
+}
+
+// nolint: paralleltest
+func TestGetCustomPort(t *testing.T) {
+	t.Setenv("PORT", "4000")
+
+	actual := getListeningPort()
+
+	assert.Equal(t, ":4000", actual)
 }
