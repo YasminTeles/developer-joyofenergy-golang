@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 	log "github.com/sirupsen/logrus"
@@ -18,8 +19,12 @@ import (
 
 func NewServer() *http.Server {
 	return &http.Server{
-		Addr:    getListeningPort(),
-		Handler: newHandler()}
+		Addr:         getListeningPort(),
+		Handler:      newHandler(),
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  60 * time.Second,
+	}
 }
 
 func getListeningPort() string {
