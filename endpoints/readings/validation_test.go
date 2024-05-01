@@ -20,6 +20,8 @@ func generateValidInput() domain.StoreReadings {
 }
 
 func TestSuccessfulValidation(t *testing.T) {
+	t.Parallel()
+
 	input := generateValidInput()
 
 	err := validateStoreReadings(input)
@@ -27,6 +29,8 @@ func TestSuccessfulValidation(t *testing.T) {
 }
 
 func TestValidationFailureWithMissingID(t *testing.T) {
+	t.Parallel()
+
 	input := generateValidInput()
 	input.SmartMeterId = ""
 
@@ -36,6 +40,8 @@ func TestValidationFailureWithMissingID(t *testing.T) {
 }
 
 func TestValidationFailureWithMissingData(t *testing.T) {
+	t.Parallel()
+
 	input := generateValidInput()
 	input.ElectricityReadings = nil
 

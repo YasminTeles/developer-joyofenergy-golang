@@ -16,6 +16,8 @@ import (
 )
 
 func TestServer(t *testing.T) {
+	t.Parallel()
+
 	port := os.Getenv("PORT")
 	os.Setenv("PORT", "8081")
 	defer os.Setenv("PORT", port)
@@ -43,6 +45,8 @@ func TestServer(t *testing.T) {
 }
 
 func TestEndpointEndpointSuccess(t *testing.T) {
+	t.Parallel()
+
 	testHandler := newHandler()
 
 	rr := httptest.NewRecorder()
@@ -65,6 +69,8 @@ func TestEndpointEndpointSuccess(t *testing.T) {
 }
 
 func TestHealthcheckEndPoint(t *testing.T) {
+	t.Parallel()
+
 	testHandler := newHandler()
 
 	rr := httptest.NewRecorder()

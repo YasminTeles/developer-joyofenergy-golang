@@ -3,10 +3,11 @@ package priceplans
 import (
 	"encoding/json"
 	"errors"
-	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/julienschmidt/httprouter"
 
 	"github.com/stretchr/testify/assert"
 
@@ -25,6 +26,8 @@ func callEndpoint(handler http.HandlerFunc, url string, t *testing.T) *httptest.
 }
 
 func TestCompareAllPricePlansReturnResultFromService(t *testing.T) {
+	t.Parallel()
+
 	s := &MockService{}
 	h := NewHandler(s)
 	params := httprouter.Params{{Key: "smartMeterId", Value: "123"}}
@@ -43,6 +46,8 @@ func TestCompareAllPricePlansReturnResultFromService(t *testing.T) {
 }
 
 func TestCompareAllPricePlansHandleServiceError(t *testing.T) {
+	t.Parallel()
+
 	s := &MockService{err: errors.New("oops")}
 	h := NewHandler(s)
 	params := httprouter.Params{{Key: "smartMeterId", Value: "123"}}
@@ -62,6 +67,8 @@ func TestCompareAllPricePlansHandleServiceError(t *testing.T) {
 }
 
 func TestCompareAllPricePlansHandlerWithInvalidInput(t *testing.T) {
+	t.Parallel()
+
 	s := &MockService{}
 	h := NewHandler(s)
 	params := httprouter.Params{{Key: "smartMeterId", Value: ""}}

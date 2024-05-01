@@ -7,11 +7,15 @@ import (
 )
 
 func TestSuccessfulValidation(t *testing.T) {
+	t.Parallel()
+
 	err := validateSmartMeterId("smart-meter-0")
 	assert.NoError(t, err)
 }
 
 func TestValidationFailureWithMissingID(t *testing.T) {
+	t.Parallel()
+
 	err := validateSmartMeterId("")
 
 	expectedErr := "cannot be blank"

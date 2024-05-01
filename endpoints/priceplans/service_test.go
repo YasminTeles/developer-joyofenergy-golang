@@ -11,6 +11,8 @@ import (
 )
 
 func TestCompareAllPricePlans(t *testing.T) {
+	t.Parallel()
+
 	accounts := repository.NewAccounts(map[string]string{"home-sweet-home": "test-plan"})
 	meterReadings := repository.NewMeterReadings(
 		map[string][]domain.ElectricityReading{"home-sweet-home": {{

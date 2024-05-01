@@ -15,7 +15,7 @@ setup: ## Set up the server.
 	@go mod download
 
 test: ## Run the tests.
-	@go test -v ./... -cover -coverprofile=coverage.txt -covermode=atomic
+	@go test -v ./... -cover -coverprofile=coverage.txt -covermode=atomic -p 8
 
 build: ## Build the server.
 	@go build -v -ldflags "-s -w" -o ./bin/server ./cmd/server
@@ -42,7 +42,7 @@ tools/golangci-lint/golangci-lint:
 	curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b tools/golangci-lint latest
 
 lint: $(TOOLS_DIR)/golangci-lint/golangci-lint ## Run linters.
-	./$(TOOLS_DIR)/golangci-lint/golangci-lint run ./...
+	./$(TOOLS_DIR)/golangci-lint/golangci-lint run ./... --enable paralleltest
 
 docker-build: ## Build container's Docker.
 	@docker build -t server .

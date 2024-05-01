@@ -8,6 +8,8 @@ import (
 )
 
 func TestStoreReadings(t *testing.T) {
+	t.Parallel()
+
 	meterReadings := repository.NewMeterReadings(
 		map[string][]domain.ElectricityReading{},
 	)

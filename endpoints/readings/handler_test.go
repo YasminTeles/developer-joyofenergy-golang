@@ -2,13 +2,14 @@ package readings
 
 import (
 	"encoding/json"
-	"github.com/julienschmidt/httprouter"
 	"io"
 	"joi-energy-golang/domain"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/julienschmidt/httprouter"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -24,6 +25,8 @@ func callEndpoint(handler http.HandlerFunc, url string, body io.Reader, t *testi
 }
 
 func TestStoreReadingsReturnResultFromService(t *testing.T) {
+	t.Parallel()
+
 	s := &MockService{}
 	h := NewHandler(s)
 	params := httprouter.Params{}
@@ -37,6 +40,8 @@ func TestStoreReadingsReturnResultFromService(t *testing.T) {
 }
 
 func TestStoreReadingsWithInvalidInput(t *testing.T) {
+	t.Parallel()
+
 	s := &MockService{}
 	h := NewHandler(s)
 	params := httprouter.Params{}
