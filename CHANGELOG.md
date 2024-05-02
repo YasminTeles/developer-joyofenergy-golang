@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+# [1.3.0](https://github.com/YasminTeles/developer-joyofenergy-golang/compare/1.2.2...1.3.0) (2024-05-02)
+
+
+### Features
+
+* add version endpoint ([9de4038](https://github.com/YasminTeles/developer-joyofenergy-golang/commit/9de403842fca301a30022f8e707ab1e33cbb2871))
+
 ## [1.2.2](https://github.com/YasminTeles/developer-joyofenergy-golang/compare/1.2.1...1.2.2) (2024-05-02)
 
 
