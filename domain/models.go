@@ -2,6 +2,8 @@ package domain
 
 import (
 	"time"
+
+	validation "github.com/go-ozzo/ozzo-validation"
 )
 
 type ElectricityReading struct {
@@ -52,4 +54,10 @@ type ErrorResponse struct {
 type StoreReadings struct {
 	SmartMeterId        string               `json:"smartMeterId"`
 	ElectricityReadings []ElectricityReading `json:"electricityReadings"`
+}
+
+func (readings StoreReadings) Validate() error {
+	return validation.ValidateStruct(&readings,
+		validation.Field(&readings.SmartMeterId, validation.Required),
+	)
 }
