@@ -28,11 +28,17 @@ func NewService(
 }
 
 func (s *service) CompareAllPricePlans(smartMeterId string) (domain.PricePlanComparisons, error) {
-	pricePlanId := s.accounts.PricePlanIdForSmartMeterId(smartMeterId)
+	pricePlanId, err := s.accounts.PricePlanIdForSmartMeterId(smartMeterId)
+	if err != nil {
+		return domain.PricePlanComparisons{}, domain.ErrNotFound
+	}
+
 	consumptionsForPricePlans := s.pricePlans.ConsumptionCostOfElectricityReadingsForEachPricePlan(smartMeterId)
+
 	if len(consumptionsForPricePlans) == 0 {
 		return domain.PricePlanComparisons{}, domain.ErrNotFound
 	}
+
 	return domain.PricePlanComparisons{
 		PricePlanId:          pricePlanId,
 		PricePlanComparisons: consumptionsForPricePlans,
