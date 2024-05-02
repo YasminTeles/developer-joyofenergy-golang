@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.2](https://github.com/YasminTeles/developer-joyofenergy-golang/compare/1.2.1...1.2.2) (2024-05-02)
+
+
+### Bug Fixes
+
+* add error when not found price ID for smart meter ID ([8166961](https://github.com/YasminTeles/developer-joyofenergy-golang/commit/8166961649ebcc9db557368e3c7457781ce6996e))
+
 ## [1.2.1](https://github.com/YasminTeles/developer-joyofenergy-golang/compare/1.2.0...1.2.1) (2024-05-01)
 
 
