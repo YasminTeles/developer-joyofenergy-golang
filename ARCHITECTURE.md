@@ -1,5 +1,7 @@
 # About the project
 
+JOI Energy is a new energy company that uses data to ensure customers are able to be on the best price plan for their energy consumption.
+
 ## Endpoints
 
 This simple server provides the following end points:
@@ -9,6 +11,51 @@ This simple server provides the following end points:
 
 - `GET /healthcheck`
  That returns the health of the server running. It's useful for check if the server can be able handling requests.
+
+- `GET /readings/read/<smartMeterId>`
+  Get Stored Readings.
+
+    **Output**
+
+    ```json
+      [
+        { "time": "2017-09-07T10:37:52.362Z", "reading": 1.3524882598124337 },
+        { "time": "2024-05-02T16:10:20.177916414Z", "reading": 0.037697719480008995 }
+      ]
+    ```
+
+- `GET /price-plans/recommend/<smartMeterId>[?limit=<limit>]`
+  View Recommended Price Plans for Usage.
+
+    `smartMeterId`: A string value, e.g. `smart-meter-0`
+
+    `limit`: Optional limit to display only a number of price plans, e.g. `2`
+
+    **Output**
+
+    ```json
+      [
+        { "price-plan-0": 15.084324881035297 },
+        ...
+      ]
+    ```
+
+- `GET /price-plans/compare-all/<smartMeterId>`
+  View Current Price Plan and Compare Usage Cost Against all Price Plans.
+
+    `smartMeterId`: A string value, e.g. `smart-meter-0`
+
+    **Output**
+
+    ```json
+      {
+        "pricePlanId": "price-plan-2",
+        "pricePlanComparisons": {
+            "price-plan-0": 21.78133785680731809,
+            ...
+        }
+      }
+    ```
 
 ## Built with
 
