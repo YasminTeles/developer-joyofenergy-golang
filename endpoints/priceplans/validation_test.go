@@ -18,6 +18,6 @@ func TestValidationFailureWithMissingID(t *testing.T) {
 
 	err := validateSmartMeterId("")
 
-	expectedErr := "cannot be blank"
-	assert.EqualError(t, err, expectedErr)
+	assert.Error(t, err)
+	assert.EqualError(t, err, "cannot be blank")
 }
